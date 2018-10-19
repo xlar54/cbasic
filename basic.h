@@ -12,7 +12,7 @@ extern "C"
 
 #define VAR_NAMESZ 2       /* maximum variable name length */
 #define CMD_NAMESZ 10       /* limit for command words */
-#define CMD_COUNT 26        /* number of available commands */
+#define CMD_COUNT 43        /* number of available commands */
 #define DATA_STSZ 16        /* depth of calculation */
 #define CALL_STSZ 16        /* subroutine call depth */
 #define LINE_SZ 80          /* line width restriction */
@@ -20,8 +20,8 @@ extern "C"
 #define FILE_SUPPORT 0   	/* 0 - no, 1 - yes */
 
 #define ERR_NONE			0
-#define ERR_UNDEF			-1
-#define ERR_UNEXP			-2
+#define ERR_UNDEFSTATEMENT	-1
+#define ERR_SYNTAX			-2
 #define ERR_UNKNOWN			-3
 #define ERR_BREAK			-4
 #define ERR_DIV0			-5
@@ -29,11 +29,12 @@ extern "C"
 #define ERR_TYPE_MISMATCH	-7
 #define ERR_NEXT_WO_FOR		-8
 #define ERR_ILLEGAL_DIRECT	-9
+#define ERR_ILLEGAL_QTY		-10
 
-#define VAR_NONE	0
-#define VAR_INT		1
-#define VAR_FLOAT	2
-#define VAR_STRING	3
+#define DATATYPE_UNDEFINED	0
+#define DATATYPE_INT		1
+#define DATATYPE_FLOAT	2
+#define DATATYPE_STRING	3
 
 #define TOKEN_TYPE_UNKNOWN		0
 #define TOKEN_TYPE_KEYWORD		1
@@ -130,6 +131,7 @@ void exec_line(struct Context *ctx);
 int exec_expr(struct Context *ctx);
 void handle_error(struct Context *ctx);
 
+void exec_cmd_cont(struct Context *ctx);
 void exec_cmd_dim(struct Context *ctx);
 void exec_cmd_end(struct Context *ctx);
 void exec_cmd_for(struct Context *ctx);  //
@@ -147,6 +149,7 @@ void exec_cmd_rem(struct Context *ctx);
 void exec_cmd_return(struct Context *ctx);
 void exec_cmd_run(struct Context *ctx);
 void exec_cmd_save(struct Context*);
+void exec_cmd_stop(struct Context*ctx);
 void exec_cmd_then(struct Context *ctx);
 
 void var_clear_all(struct Context *ctx);
@@ -187,8 +190,8 @@ void tokenize(struct Context* ctx, const unsigned char* input, unsigned char *ou
 // Functions are in the range 180–202 / $B4–CA
 
 #define TOKEN_END			128	//
-#define TOKEN_FOR			129	
-#define TOKEN_NEXT			130	
+#define TOKEN_FOR			129	//
+#define TOKEN_NEXT			130	//
 #define TOKEN_DATA			131	
 #define TOKEN_INPUT_DEV		132	
 #define TOKEN_INPUT			133	//
@@ -202,7 +205,7 @@ void tokenize(struct Context* ctx, const unsigned char* input, unsigned char *ou
 #define TOKEN_GOSUB			141	//
 #define TOKEN_RETURN		142	//
 #define TOKEN_REM			143	//
-#define TOKEN_STOP			144	
+#define TOKEN_STOP			144	//
 #define TOKEN_ON			145	
 #define TOKEN_WAIT			146	
 #define TOKEN_LOAD			147	//
@@ -238,29 +241,29 @@ void tokenize(struct Context* ctx, const unsigned char* input, unsigned char *ou
 #define TOKEN_GT			177	//
 #define TOKEN_EQUALS		178	//
 #define TOKEN_LT			179	//
-#define TOKEN_SGN			180	
-#define TOKEN_INT			181	
+#define TOKEN_SGN			180	//
+#define TOKEN_INT			181	//
 #define TOKEN_ABS			182	//
 #define TOKEN_USR			183	
 #define TOKEN_FRE			184	
 #define TOKEN_POS			185	
-#define TOKEN_SQR			186	
-#define TOKEN_RND			187	
-#define TOKEN_LOG			188		
-#define TOKEN_EXP			189	
-#define TOKEN_COS			190	
-#define TOKEN_SIN			191	
-#define TOKEN_TAN			192	
-#define TOKEN_ATN			193	
+#define TOKEN_SQR			186	//
+#define TOKEN_RND			187	//
+#define TOKEN_LOG			188	//	
+#define TOKEN_EXP			189	//
+#define TOKEN_COS			190	//
+#define TOKEN_SIN			191	//
+#define TOKEN_TAN			192	//
+#define TOKEN_ATN			193	//
 #define TOKEN_PEEK			194	
 #define TOKEN_LEN			195	//
-#define TOKEN_STR$			196	
-#define TOKEN_VAL			197	
-#define TOKEN_ASC			198	
-#define TOKEN_CHR$			199	
-#define TOKEN_LEFT$			200	
-#define TOKEN_RIGHT$		201	
-#define TOKEN_MID$			202	
+#define TOKEN_STR$			196	//
+#define TOKEN_VAL			197	//
+#define TOKEN_ASC			198	//
+#define TOKEN_CHR$			199	//
+#define TOKEN_LEFT$			200	//
+#define TOKEN_RIGHT$		201	//
+#define TOKEN_MID$			202	//
 #define TOKEN_GO			203	
 }
 #endif
